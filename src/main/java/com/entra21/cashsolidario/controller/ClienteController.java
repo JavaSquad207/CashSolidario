@@ -12,28 +12,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.entra21.cashsolidario.entity.Endereco;
-import com.entra21.cashsolidario.repository.EnderecoRepository;
+import com.entra21.cashsolidario.entity.Cliente;
+import com.entra21.cashsolidario.repository.ClienteRepository;
 
 @RestController
-@RequestMapping(value="/endereco")
-public class EnderecoController {
+@RequestMapping(value="/cliente")
+public class ClienteController {
 	
 	@Autowired
-	private EnderecoRepository enderecoRepository;
+	private ClienteRepository clienteRepository;
 	
 	@PostMapping(value="salvar")
 	@ResponseBody
-	public ResponseEntity<Endereco>salvar(@RequestBody Endereco e){
-		Endereco endereco = enderecoRepository.save(e);
-		return new ResponseEntity<Endereco>(endereco,HttpStatus.CREATED);
+	public ResponseEntity<Cliente>salvar(@RequestBody Cliente c){
+		Cliente cliente = clienteRepository.save(c);
+		return new ResponseEntity<Cliente>(cliente ,HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value = "listatodos")
 	@ResponseBody
-	public ResponseEntity<List<Endereco>>listaEndereco(){
-		List<Endereco> endereco = enderecoRepository.findAll();
-		return new ResponseEntity<List<Endereco>>(endereco, HttpStatus.OK);
+	public ResponseEntity<List<Cliente>>listaCliente(){
+		List<Cliente> cliente = clienteRepository.findAll();
+		return new ResponseEntity<List<Cliente>>(cliente, HttpStatus.OK);
 	}
-
 }

@@ -1,7 +1,5 @@
 package com.entra21.cashsolidario.entity;
 
-
-
 import java.io.Serializable;
 
 import javax.persistence.Entity;
