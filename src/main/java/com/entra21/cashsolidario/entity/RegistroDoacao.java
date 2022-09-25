@@ -2,8 +2,18 @@ package com.entra21.cashsolidario.entity;
 
 import java.util.Date;
 
-public class RegistroDoacao {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
+public class RegistroDoacao {
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idRegistroDoacao;
 	private int fk_idCliente;
 	private int fk_idCampanha;
@@ -69,6 +79,10 @@ public class RegistroDoacao {
 		return "RegistroDoacao [idRegistroDoacao=" + idRegistroDoacao + ", fk_idCliente=" + fk_idCliente
 				+ ", fk_idCampanha=" + fk_idCampanha + ", valor=" + valor + ", dataRegistroDoacao=" + dataRegistroDoacao
 				+ "]";
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

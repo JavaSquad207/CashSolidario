@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 import com.entra21.cashsolidario.entity.RegistroDoacao;
 
 @Service
-public interface RegistraDoacaoRepository extends JpaRepository<RegistroDoacao, Long>{
+public interface RegistroDoacaoRepository extends JpaRepository<RegistroDoacao, Long>{
 
 }
