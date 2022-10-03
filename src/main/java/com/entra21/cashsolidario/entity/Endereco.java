@@ -31,17 +31,20 @@ public class Endereco implements Serializable {
 	private String bairro;
 	private String cidade;
 	private String uf;
-
+	
 	public Endereco() {
 		super();
 	}
 
-	public Endereco(Long id, int fk_idCliente, int fk_idEntidade, String cep, String logradouro, int numero,
+	
+	
+	
+	public Endereco(Long id, Cliente cliente, Entidade entidade, String cep, String logradouro, int numero,
 			String complemento, String bairro, String cidade, String uf) {
 		super();
 		this.id = id;
-		this.fk_idCliente = fk_idCliente;
-		this.fk_idEntidade = fk_idEntidade;
+		this.cliente = cliente;
+		this.entidade = entidade;
 		this.cep = cep;
 		this.logradouro = logradouro;
 		this.numero = numero;
@@ -51,6 +54,9 @@ public class Endereco implements Serializable {
 		this.uf = uf;
 	}
 
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -59,20 +65,20 @@ public class Endereco implements Serializable {
 		this.id = id;
 	}
 
-	public int getFk_idCliente() {
-		return fk_idCliente;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setFk_idCliente(int fk_idCliente) {
-		this.fk_idCliente = fk_idCliente;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
-	public int getFk_idEntidade() {
-		return fk_idEntidade;
+	public Entidade getEntidade() {
+		return entidade;
 	}
 
-	public void setFk_idEntidade(int fk_idEntidade) {
-		this.fk_idEntidade = fk_idEntidade;
+	public void setEntidade(Entidade entidade) {
+		this.entidade = entidade;
 	}
 
 	public String getCep() {
@@ -135,11 +141,15 @@ public class Endereco implements Serializable {
 		return serialVersionUID;
 	}
 
+
+
+
 	@Override
 	public String toString() {
-		return "Endereco [id=" + id + ", fk_idCliente=" + fk_idCliente + ", fk_idEntidade=" + fk_idEntidade + ", cep="
-				+ cep + ", logradouro=" + logradouro + ", numero=" + numero + ", complemento=" + complemento
-				+ ", bairro=" + bairro + ", cidade=" + cidade + ", uf=" + uf + "]";
+		return "Endereco [id=" + id + ", cliente=" + cliente + ", entidade=" + entidade + ", cep=" + cep
+				+ ", logradouro=" + logradouro + ", numero=" + numero + ", complemento=" + complemento + ", bairro="
+				+ bairro + ", cidade=" + cidade + ", uf=" + uf + "]";
 	}
 
+	
 }
