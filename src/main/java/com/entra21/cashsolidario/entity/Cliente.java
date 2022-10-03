@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Cliente implements Serializable {
@@ -16,6 +18,10 @@ public class Cliente implements Serializable {
 	private Long id;
 	private String nome;
 	private String cpf;
+
+	@JoinColumn(name="endereco_id")
+	private Endereco endereco;
+	
 
 	public Cliente() {
 		super();

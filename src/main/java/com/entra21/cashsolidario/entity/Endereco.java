@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Endereco implements Serializable {
@@ -14,8 +16,14 @@ public class Endereco implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private int fk_idCliente;
-	private int fk_idEntidade;
+	@ManyToOne
+	@JoinColumn(name="fk_idCliente")
+	private Cliente cliente;
+	// private int fk_idCliente;
+	@ManyToOne
+	@JoinColumn(name="fk_idEntidade")
+	private Entidade entidade;
+	// private int fk_idEntidade;
 	private String cep;
 	private String logradouro;
 	private int numero;
