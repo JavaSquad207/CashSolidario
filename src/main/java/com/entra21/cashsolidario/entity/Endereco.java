@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class Endereco implements Serializable {
@@ -16,14 +14,8 @@ public class Endereco implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne
-	@JoinColumn(name="fk_idCliente")
-	private Cliente cliente;
-	// private int fk_idCliente;
-	@ManyToOne
-	@JoinColumn(name="fk_idEntidade")
-	private Entidade entidade;
-	// private int fk_idEntidade;
+	private int fk_idCliente;
+	private int fk_idEntidade;
 	private String cep;
 	private String logradouro;
 	private int numero;
@@ -31,31 +23,10 @@ public class Endereco implements Serializable {
 	private String bairro;
 	private String cidade;
 	private String uf;
-	
+
 	public Endereco() {
 		super();
 	}
-
-	
-	
-	
-	public Endereco(Long id, Cliente cliente, Entidade entidade, String cep, String logradouro, int numero,
-			String complemento, String bairro, String cidade, String uf) {
-		super();
-		this.id = id;
-		this.cliente = cliente;
-		this.entidade = entidade;
-		this.cep = cep;
-		this.logradouro = logradouro;
-		this.numero = numero;
-		this.complemento = complemento;
-		this.bairro = bairro;
-		this.cidade = cidade;
-		this.uf = uf;
-	}
-
-
-
 
 	public Long getId() {
 		return id;
@@ -65,20 +36,20 @@ public class Endereco implements Serializable {
 		this.id = id;
 	}
 
-	public Cliente getCliente() {
-		return cliente;
+	public int getFk_idCliente() {
+		return fk_idCliente;
 	}
 
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
+	public void setFk_idCliente(int fk_idCliente) {
+		this.fk_idCliente = fk_idCliente;
 	}
 
-	public Entidade getEntidade() {
-		return entidade;
+	public int getFk_idEntidade() {
+		return fk_idEntidade;
 	}
 
-	public void setEntidade(Entidade entidade) {
-		this.entidade = entidade;
+	public void setFk_idEntidade(int fk_idEntidade) {
+		this.fk_idEntidade = fk_idEntidade;
 	}
 
 	public String getCep() {
@@ -141,15 +112,26 @@ public class Endereco implements Serializable {
 		return serialVersionUID;
 	}
 
-
-
+	public Endereco(Long id, int fk_idCliente, int fk_idEntidade, String cep, String logradouro, int numero,
+			String complemento, String bairro, String cidade, String uf) {
+		super();
+		this.id = id;
+		this.fk_idCliente = fk_idCliente;
+		this.fk_idEntidade = fk_idEntidade;
+		this.cep = cep;
+		this.logradouro = logradouro;
+		this.numero = numero;
+		this.complemento = complemento;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.uf = uf;
+	}
 
 	@Override
 	public String toString() {
-		return "Endereco [id=" + id + ", cliente=" + cliente + ", entidade=" + entidade + ", cep=" + cep
-				+ ", logradouro=" + logradouro + ", numero=" + numero + ", complemento=" + complemento + ", bairro="
-				+ bairro + ", cidade=" + cidade + ", uf=" + uf + "]";
+		return "Endereco [id=" + id + ", fk_idCliente=" + fk_idCliente + ", fk_idEntidade=" + fk_idEntidade + ", cep="
+				+ cep + ", logradouro=" + logradouro + ", numero=" + numero + ", complemento=" + complemento
+				+ ", bairro=" + bairro + ", cidade=" + cidade + ", uf=" + uf + "]";
 	}
 
-	
 }
