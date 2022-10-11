@@ -8,38 +8,42 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.ManyToOne;
 
 @Entity
-@SequenceGenerator(name= "endereco_seq", sequenceName = "endereco_seq", initialValue = 1, allocationSize = 1)
+
 public class Endereco implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "endereco_seq")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String cep;
-	
 	private String logradouro;
 	private int numero;
 	private String complemento;
 	private String bairro;
 	private String cidade;
 	private String uf;
-	// @OneToOne(cascade = CascadeType.ALL)
 	
-	// private Cliente client;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "cliente_id")
+	public Cliente cliente;
+	
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "entidade_id")
+	public Entidade entidade;
 
-	
-	
+
 	public Endereco() {
 		super();
 	}
 
 
 	public Endereco(Long id, String cep, String logradouro, int numero, String complemento, String bairro,
-			String cidade, String uf, Cliente client) {
+			String cidade, String uf, Cliente cliente, Entidade entidade) {
 		super();
 		this.id = id;
 		this.cep = cep;
@@ -49,7 +53,8 @@ public class Endereco implements Serializable {
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.uf = uf;
-		// this.client = client;
+		this.cliente = cliente;
+		this.entidade = entidade;
 	}
 
 
@@ -132,17 +137,38 @@ public class Endereco implements Serializable {
 		this.uf = uf;
 	}
 
-/*
-	public Cliente getClient() {
-		return client;
+
+	public Cliente getCliente() {
+		return cliente;
 	}
 
 
-	public void setClient(Cliente client) {
-		this.client = client;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+
+	public Entidade getEntidade() {
+		return entidade;
+	}
+
+
+	public void setEntidade(Entidade entidade) {
+		this.entidade = entidade;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Endereco [id=" + id + ", cep=" + cep + ", logradouro=" + logradouro + ", numero=" + numero
+				+ ", complemento=" + complemento + ", bairro=" + bairro + ", cidade=" + cidade + ", uf=" + uf
+				+ ", cliente=" + cliente + ", entidade=" + entidade + "]";
 	}
 	
-*/
+	
+	
+	
+	
 	
 	
 }

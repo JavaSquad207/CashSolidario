@@ -15,37 +15,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.entra21.cashsolidario.entity.Endereco;
-import com.entra21.cashsolidario.repository.EnderecoRepository;
+import com.entra21.cashsolidario.entity.Entidade;
+import com.entra21.cashsolidario.repository.EntidadeRepository;
 
 @RestController
-@RequestMapping(value="/endereco")
+@RequestMapping(value="/entidade")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
-public class EnderecoController {
+public class EntidadeController {
 	
 	@Autowired
-	private EnderecoRepository enderecoRepository;
+	private EntidadeRepository entidadeRepository;
 	
 	@PostMapping(value="salvar")
 	@ResponseBody
-	public ResponseEntity<Endereco>salvar(@RequestBody Endereco e){
-		Endereco endereco = enderecoRepository.save(e);
-		return new ResponseEntity<Endereco>(endereco,HttpStatus.CREATED);
+	public ResponseEntity<Entidade>salvar(@RequestBody Entidade e){
+		Entidade entidade = entidadeRepository.save(e);
+		return new ResponseEntity<Entidade>(entidade,HttpStatus.CREATED);
 	}
 	
 	
 	
 	@GetMapping(value = "listatodos")
 	@ResponseBody
-	public ResponseEntity<List<Endereco>>listaEndereco(){
-		List<Endereco> endereco = enderecoRepository.findAll();
-		return new ResponseEntity<List<Endereco>>(endereco, HttpStatus.OK);
+	public ResponseEntity<List<Entidade>>listaEntidade(){
+		List<Entidade> entidade = entidadeRepository.findAll();
+		return new ResponseEntity<List<Entidade>>(entidade, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "enderecoid/{id}")
+	@GetMapping(value = "entidadeid/{id}")
 	@ResponseBody
-	public ResponseEntity<Endereco> EnderecoID(@PathVariable("id") Long id) {
-		Endereco e = enderecoRepository.findById(id).get();
-		return new ResponseEntity<Endereco>(e, HttpStatus.OK);
+	public ResponseEntity<Entidade> EntidadeID(@PathVariable("id") Long id) {
+		Entidade e = entidadeRepository.findById(id).get();
+		return new ResponseEntity<Entidade>(e, HttpStatus.OK);
 	}
 	
 //	@GetMapping(value = "/enderecoporcliente/{id}")
@@ -56,16 +57,11 @@ public class EnderecoController {
 //	}
 	
 	@GetMapping(value = "delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") Endereco id) {
-		enderecoRepository.delete(id);
-		return new ResponseEntity<String>("Endereco Excluído com Sucesso", HttpStatus.OK);
+	public ResponseEntity<?> delete(@PathVariable("id") Entidade id) {
+		entidadeRepository.delete(id);
+		return new ResponseEntity<String>("Entidade Excluída com Sucesso", HttpStatus.OK);
 
 	}
-	
-	
-	
-	
-	
 	
 
 }

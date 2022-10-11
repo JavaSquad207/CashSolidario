@@ -1,16 +1,11 @@
 package com.entra21.cashsolidario;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.entra21.cashsolidario.controller.ClienteController;
-import com.entra21.cashsolidario.entity.Cliente;
-import com.entra21.cashsolidario.entity.Endereco;
 
 
 @DataJpaTest
@@ -44,6 +39,8 @@ class CashsolidarioApplicationTests {
 		
 		clientecontroller.salvar(cli);
 */
+		
+	System.out.println("OLÁ");
 	}
-
+ 
 }
