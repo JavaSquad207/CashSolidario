@@ -27,13 +27,35 @@ public class ClienteController {
 	@Autowired
 	private ClienteRepository clienteRepository;
 
-	@PostMapping(value = "salvar")
+	@PostMapping(value = "salvarId")
 	@ResponseBody
-	public ResponseEntity<Cliente> salvar(@RequestBody Cliente c) {
+	public ResponseEntity<Cliente> salvarId(@RequestBody Cliente c) {
 		Cliente cliente = clienteRepository.save(c);
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
 	}
 
+	@PostMapping(value = "salvar")
+	@ResponseBody
+	public ResponseEntity<?> salvar(@RequestBody Cliente c) {
+		String retorno = "";
+		String nome = c.getNome();
+		String cpf = c.getCpf();
+		if(nome.equals("")) {
+			retorno = "nomevazio";
+			return new ResponseEntity<String>(retorno, HttpStatus.PRECONDITION_REQUIRED);
+		} else if (cpf.equals("")) {
+			retorno = "cpfvazio";
+			return new ResponseEntity<String>(retorno, HttpStatus.PRECONDITION_FAILED);	
+		} else if(nome != "" && cpf != "") {
+		Cliente cliente = clienteRepository.save(c);
+		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+		}
+		return null;
+	}
+	
+	
+	
+	
 	@GetMapping(value = "listatodos")
 	@ResponseBody
 	public ResponseEntity<List<Cliente>> listaCliente() {
