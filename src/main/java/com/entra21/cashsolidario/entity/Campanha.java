@@ -14,39 +14,39 @@ public class Campanha implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idCampanha;
-	private int fk_Identidade;
+	private Long id;
+	private int fkIdentidade;
 	private String nome;
-	private Date dataInicio;
-	private Date dataFinal;
+	private String dataInicio;
+	private String dataFinal;
 	
 	public Campanha() {
 		super();
 	}
 
-	public Campanha(Long idCampanha, int fk_Identidade, String nome, Date dataInicio, Date dataFinal) {
+	public Campanha(Long id, int fkIdentidade, String nome, String dataInicio, String dataFinal) {
 		super();
-		this.idCampanha = idCampanha;
-		this.fk_Identidade = fk_Identidade;
+		this.id = id;
+		this.fkIdentidade = fkIdentidade;
 		this.nome = nome;
 		this.dataInicio = dataInicio;
 		this.dataFinal = dataFinal;
 	}
 
-	public Long getIdCampanha() {
-		return idCampanha;
+	public Long getId() {
+		return id;
 	}
 
-	public void setIdCampanha(Long idCampanha) {
-		this.idCampanha = idCampanha;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public int getFk_Identidade() {
-		return fk_Identidade;
+	public int getFkIdentidade() {
+		return fkIdentidade;
 	}
 
-	public void setFk_Identidade(int fk_Identidade) {
-		this.fk_Identidade = fk_Identidade;
+	public void setFkIdentidade(int fkIdentidade) {
+		this.fkIdentidade = fkIdentidade;
 	}
 
 	public String getNome() {
@@ -57,27 +57,29 @@ public class Campanha implements Serializable {
 		this.nome = nome;
 	}
 
-	public Date getDataInicio() {
+	public String getDataInicio() {
 		return dataInicio;
 	}
 
-	public void setDataInicio(Date dataInicio) {
+	public void setDataInicio(String dataInicio) {
 		this.dataInicio = dataInicio;
 	}
 
-	public Date getDataFinal() {
+	public String getDataFinal() {
 		return dataFinal;
 	}
 
-	public void setDataFinal(Date dataFinal) {
+	public void setDataFinal(String dataFinal) {
 		this.dataFinal = dataFinal;
 	}
 
 	@Override
 	public String toString() {
-		return "Campanha [idCampanha=" + idCampanha + ", fk_Identidade=" + fk_Identidade + ", nome=" + nome
-				+ ", dataInicio=" + dataInicio + ", dataFinal=" + dataFinal + "]";
+		return "Campanha [id=" + id + ", fkIdentidade=" + fkIdentidade + ", nome=" + nome + ", dataInicio=" + dataInicio
+				+ ", dataFinal=" + dataFinal + "]";
 	}
+
+	
 	
 	
 }
