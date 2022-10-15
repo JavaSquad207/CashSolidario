@@ -57,15 +57,14 @@ public class EnderecoController {
 	public ResponseEntity<?> delete(@PathVariable("id") Endereco id) {
 		if (id.getFk_idCliente() == null) {
 			Long verificarIdentidade = id.getFk_idEntidade();
-			
-
-		} else {
+			enderecoRepository.enderecoExcluiEntidade(verificarIdentidade);
+		} else if (id.getFk_idEntidade() == null) {
 
 			Long verificarCliente = id.getFk_idCliente();
+			enderecoRepository.enderecoExcluiCliente(verificarCliente);
 
 		}
-
-		enderecoRepository.delete(id);
+		
 		return new ResponseEntity<String>("Endereco Excluído com Sucesso", HttpStatus.OK);
 
 	}
