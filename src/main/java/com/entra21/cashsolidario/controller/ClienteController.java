@@ -1,5 +1,8 @@
 package com.entra21.cashsolidario.controller;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.entra21.cashsolidario.entity.Banco;
 import com.entra21.cashsolidario.entity.Cliente;
+import com.entra21.cashsolidario.entity.Endereco;
+import com.entra21.cashsolidario.facemodels.ClienteEndereco;
 import com.entra21.cashsolidario.repository.ClienteRepository;
+import com.entra21.cashsolidario.repository.EnderecoRepository;
 
 @RestController
 @RequestMapping(value = "/cliente")
@@ -26,6 +32,13 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ClienteEndereco clienteEndereco;
+	
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	@PostMapping(value = "salvarId")
 	@ResponseBody
@@ -36,26 +49,24 @@ public class ClienteController {
 
 	@PostMapping(value = "salvar")
 	@ResponseBody
-	public ResponseEntity<?> salvar(@RequestBody Cliente c) {
-		String retorno = "";
-		String nome = c.getNome();
-		String cpf = c.getCpf();
-		if(nome.equals("")) {
-			retorno = "nomevazio";
-			return new ResponseEntity<String>(retorno, HttpStatus.PRECONDITION_REQUIRED);
-		} else if (cpf.equals("")) {
-			retorno = "cpfvazio";
-			return new ResponseEntity<String>(retorno, HttpStatus.PRECONDITION_FAILED);	
-		} else if(nome != "" && cpf != "") {
-		Cliente cliente = clienteRepository.save(c);
-		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
-		}
-		return null;
+	public ResponseEntity<?> salvar(@RequestBody ClienteEndereco c) {
+		Cliente novoCliente = new Cliente();
+		novoCliente.setNome(c.getNome());
+		novoCliente.setCpf(c.getCpf());
+		Cliente clienteGravado = clienteRepository.save(novoCliente);
+		Endereco novoEndereco = new Endereco();
+		novoEndereco.setFk_idCliente(clienteGravado.getId());
+		novoEndereco.setLogradouro(c.getLogradouro());
+		novoEndereco.setNumero(c.getNumero());
+		novoEndereco.setComplemento(c.getComplemento());
+		novoEndereco.setBairro(c.getBairro());
+		novoEndereco.setCep(c.getCep());
+		novoEndereco.setCidade(c.getCidade());
+		novoEndereco.setUf(c.getUf());
+		enderecoRepository.save(novoEndereco);
+		return new ResponseEntity<Cliente>(clienteGravado, HttpStatus.CREATED);
 	}
-	
-	
-	
-	
+
 	@GetMapping(value = "listatodos")
 	@ResponseBody
 	public ResponseEntity<List<Cliente>> listaCliente() {
@@ -63,12 +74,13 @@ public class ClienteController {
 		return new ResponseEntity<List<Cliente>>(cliente, HttpStatus.OK);
 	}
 
-	//@DeleteMapping(value = "delete/{id}")
-	// @ResponseBody
-	//@ResponseStatus(HttpStatus.NO_CONTENT	)
+	
+	
 	@GetMapping(value = "delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Cliente id) {
 		clienteRepository.delete(id);
+		enderecoRepository.enderecoExcluiCliente(id.getId());
+		
 		return new ResponseEntity<String>("Cliente Excluído com Sucesso", HttpStatus.OK);
 
 	}
@@ -96,5 +108,51 @@ public class ClienteController {
 		Cliente cliente = clienteRepository.saveAndFlush(c);
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 	}
+	
+	
+	
+	
+	
+	
+	
+	@PostMapping(value = "salvar001")
+	@ResponseBody
+	public ResponseEntity<?> salvar001(@RequestBody Cliente c) {
+		Cliente cliente = clienteRepository.save(c);
+		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+	}
+	
+	
+	public boolean enderecoExcluiCliente(Long id) {
+		boolean excluiu = false;
 
+		// Conectar no banco
+		Connection conexao = Banco.getConnection();
+		String sql = " DELETE FROM ENDERECO " + " WHERE FK_IDCLIENTE = ? ";
+		// Obter o preparedStatement
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
+		try {
+			// Executar
+			stmt.setLong(1, id);
+			int registrosExcluidos = stmt.executeUpdate();
+			excluiu = (registrosExcluidos > 0);
+		} catch (SQLException e) {
+			System.out.println("Erro ao excluir clente.\nCausa: " + e.getMessage());
+		} finally {
+			Banco.closePreparedStatement(stmt);
+			Banco.closeConnection(conexao);
+		}
+
+		return excluiu;
+	}
+
+	
+	
+	
+	
 }
+
+
+
+
+

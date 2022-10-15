@@ -9,4 +9,14 @@ import com.entra21.cashsolidario.entity.Entidade;
 @Service
 @Repository
 public interface EntidadeRepository extends JpaRepository<Entidade, Long>{
+
+
+
+
+
+
 }
+
+
+
+

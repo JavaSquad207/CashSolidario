@@ -35,14 +35,6 @@ public class EnderecoController {
 	@PostMapping(value = "salvar")
 	@ResponseBody
 	public ResponseEntity<?> salvar(@RequestBody Endereco e) {
-		if (e.getLogradouro().isBlank() || Integer.toString(e.getNumero()).matches("[A-Z]")
-				|| Integer.toString(e.getNumero()).isBlank() || e.getBairro().isBlank() || e.getComplemento().isBlank()
-				|| e.getCidade().isBlank() || e.getUf().isBlank() || e.getCep().isBlank()
-
-		) {
-			return null;
-
-		}
 		Endereco endereco = enderecoRepository.save(e);
 		return new ResponseEntity<Endereco>(endereco, HttpStatus.CREATED);
 	}
@@ -61,16 +53,18 @@ public class EnderecoController {
 		return new ResponseEntity<Endereco>(e, HttpStatus.OK);
 	}
 
-//	@GetMapping(value = "/enderecoporcliente/{id}")
-//	@ResponseBody
-//	public ResponseEntity<List<Endereco>> enderecoCli(@PathVariable("id") Long id) {
-//		List<Endereco> e = enderecoRepository.findByIdCli(id);
-//		return new ResponseEntity<List<Endereco>>(e, HttpStatus.OK);
-//	}
-
 	@GetMapping(value = "delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Endereco id) {
-		enderecoRepository.delete(id);
+		if (id.getFk_idCliente() == null) {
+			Long verificarIdentidade = id.getFk_idEntidade();
+			enderecoRepository.enderecoExcluiEntidade(verificarIdentidade);
+		} else if (id.getFk_idEntidade() == null) {
+
+			Long verificarCliente = id.getFk_idCliente();
+			enderecoRepository.enderecoExcluiCliente(verificarCliente);
+
+		}
+		
 		return new ResponseEntity<String>("Endereco Excluído com Sucesso", HttpStatus.OK);
 
 	}

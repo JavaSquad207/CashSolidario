@@ -9,9 +9,7 @@ import com.entra21.cashsolidario.entity.Cliente;
 @Service
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-	
-	
-	
+		
 	
 
 }

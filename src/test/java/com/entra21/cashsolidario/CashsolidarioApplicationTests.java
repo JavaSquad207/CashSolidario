@@ -2,18 +2,24 @@ package com.entra21.cashsolidario;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.entra21.cashsolidario.controller.ClienteController;
+import com.entra21.cashsolidario.repository.EnderecoRepository;
 
 
 @DataJpaTest
 @SpringBootTest
-class CashsolidarioApplicationTests {
+public class CashsolidarioApplicationTests {
 	
 	@Autowired
-	private ClienteController clientecontroller;	
+	private ClienteController clientecontroller;
+	
+	@Autowired
+	private EnderecoRepository enderecorepository;	
+
 
 	@Test
 	void contextLoads() {
@@ -38,9 +44,13 @@ class CashsolidarioApplicationTests {
 		cli.setEndereco(endereco);
 		
 		clientecontroller.salvar(cli);
+		
 */
+		enderecorepository.enderecoExcluiEntidade((long) 4);
 		
 	System.out.println("OLÁ");
 	}
+	
+
  
 }
