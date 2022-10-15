@@ -1,5 +1,8 @@
 package com.entra21.cashsolidario.controller;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.entra21.cashsolidario.entity.Banco;
+import com.entra21.cashsolidario.entity.Cliente;
 import com.entra21.cashsolidario.entity.Endereco;
 import com.entra21.cashsolidario.entity.Entidade;
+import com.entra21.cashsolidario.facemodels.ClienteEndereco;
+import com.entra21.cashsolidario.repository.EnderecoRepository;
 import com.entra21.cashsolidario.repository.EntidadeRepository;
 
 @RestController
@@ -26,11 +33,31 @@ public class EntidadeController {
 	@Autowired
 	private EntidadeRepository entidadeRepository;
 	
+	@Autowired
+	private ClienteEndereco clienteEndereco;
+	
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
 	@PostMapping(value="salvar")
 	@ResponseBody
-	public ResponseEntity<Entidade>salvar(@RequestBody Entidade e){
-		Entidade entidade = entidadeRepository.save(e);
-		return new ResponseEntity<Entidade>(entidade,HttpStatus.CREATED);
+	public ResponseEntity<Entidade>salvar(@RequestBody ClienteEndereco e){
+		Entidade novaEntidade = new Entidade();
+		novaEntidade.setNome(e.getNome());
+		novaEntidade.setCnpj(e.getCnpj());		
+		Entidade entidadeGravada = entidadeRepository.save(novaEntidade);
+		Endereco novoEndereco = new Endereco();
+		novoEndereco.setFk_idEntidade(entidadeGravada.getId());
+		novoEndereco.setLogradouro(e.getLogradouro());
+		novoEndereco.setNumero(e.getNumero());
+		novoEndereco.setComplemento(e.getComplemento());
+		novoEndereco.setBairro(e.getBairro());
+		novoEndereco.setCep(e.getCep());
+		novoEndereco.setCidade(e.getCidade());
+		novoEndereco.setUf(e.getUf());
+		enderecoRepository.save(novoEndereco);
+		return new ResponseEntity<Entidade>(novaEntidade,HttpStatus.CREATED);
 	}
 	
 	
@@ -49,18 +76,22 @@ public class EntidadeController {
 		return new ResponseEntity<Entidade>(e, HttpStatus.OK);
 	}
 	
-//	@GetMapping(value = "/enderecoporcliente/{id}")
-//	@ResponseBody
-//	public ResponseEntity<List<Endereco>> enderecoCli(@PathVariable("id") Long id) {
-//		List<Endereco> e = enderecoRepository.findByIdCli(id);
-//		return new ResponseEntity<List<Endereco>>(e, HttpStatus.OK);
-//	}
 	
 	@GetMapping(value = "delete/{id}")
+	
 	public ResponseEntity<?> delete(@PathVariable("id") Entidade id) {
+		enderecoRepository.enderecoExcluiEntidade(id.getId());				
 		entidadeRepository.delete(id);
 		return new ResponseEntity<String>("Entidade Excluída com Sucesso", HttpStatus.OK);
 
+	}
+	
+	
+	@PostMapping(value="salvar0001")
+	@ResponseBody
+	public ResponseEntity<Entidade>salvar0001(@RequestBody Entidade e){
+		Entidade entidade = entidadeRepository.save(e);
+		return new ResponseEntity<Entidade>(entidade,HttpStatus.CREATED);
 	}
 	
 
