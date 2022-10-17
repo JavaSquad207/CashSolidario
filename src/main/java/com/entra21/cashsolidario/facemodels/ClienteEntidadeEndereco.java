@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Data
 @Service
-public class ClienteEndereco {
+public class ClienteEntidadeEndereco {
+	private Long id;
 	private String nome;
 	private String cpf;
 	private String cnpj;
@@ -19,6 +20,7 @@ public class ClienteEndereco {
 	private String uf;
 	private Long fk_idEntidade;
 	private Long fk_idCliente;
+	private Long endId;
 	
 
 }

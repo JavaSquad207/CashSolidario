@@ -21,7 +21,7 @@ import com.entra21.cashsolidario.entity.Banco;
 import com.entra21.cashsolidario.entity.Cliente;
 import com.entra21.cashsolidario.entity.Endereco;
 import com.entra21.cashsolidario.entity.Entidade;
-import com.entra21.cashsolidario.facemodels.ClienteEndereco;
+import com.entra21.cashsolidario.facemodels.ClienteEntidadeEndereco;
 import com.entra21.cashsolidario.repository.EnderecoRepository;
 import com.entra21.cashsolidario.repository.EntidadeRepository;
 
@@ -34,7 +34,7 @@ public class EntidadeController {
 	private EntidadeRepository entidadeRepository;
 	
 	@Autowired
-	private ClienteEndereco clienteEndereco;
+	private ClienteEntidadeEndereco clienteEndereco;
 	
 	
 	@Autowired
@@ -42,7 +42,7 @@ public class EntidadeController {
 	
 	@PostMapping(value="salvar")
 	@ResponseBody
-	public ResponseEntity<Entidade>salvar(@RequestBody ClienteEndereco e){
+	public ResponseEntity<Entidade>salvar(@RequestBody ClienteEntidadeEndereco e){
 		Entidade novaEntidade = new Entidade();
 		novaEntidade.setNome(e.getNome());
 		novaEntidade.setCnpj(e.getCnpj());		
@@ -69,9 +69,9 @@ public class EntidadeController {
 		return new ResponseEntity<List<Entidade>>(entidade, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "entidadeid/{id}")
+	@GetMapping(value = "entidadeid001/{id}")
 	@ResponseBody
-	public ResponseEntity<Entidade> EntidadeID(@PathVariable("id") Long id) {
+	public ResponseEntity<Entidade> EntidadeID001(@PathVariable("id") Long id) {
 		Entidade e = entidadeRepository.findById(id).get();
 		return new ResponseEntity<Entidade>(e, HttpStatus.OK);
 	}
@@ -92,6 +92,30 @@ public class EntidadeController {
 	public ResponseEntity<Entidade>salvar0001(@RequestBody Entidade e){
 		Entidade entidade = entidadeRepository.save(e);
 		return new ResponseEntity<Entidade>(entidade,HttpStatus.CREATED);
+	}
+	
+	@GetMapping(value = "entidadeid/{id}")
+	@ResponseBody
+	public ResponseEntity<?> EntidadeID(@PathVariable("id") Long id) {
+		
+		Entidade e = entidadeRepository.findById(id).get();
+		Endereco ec = new Endereco() ;
+		ec = enderecoRepository.procuraEnderecoEntidade(id);
+		ClienteEntidadeEndereco entidadeCompleta = new ClienteEntidadeEndereco();
+		entidadeCompleta.setNome(e.getNome());
+		entidadeCompleta.setCnpj(e.getCnpj());
+		entidadeCompleta.setLogradouro(ec.getLogradouro());
+		entidadeCompleta.setNumero(ec.getNumero());
+		entidadeCompleta.setComplemento(ec.getComplemento());
+		entidadeCompleta.setBairro(ec.getBairro());
+		entidadeCompleta.setCep(ec.getCep());
+		entidadeCompleta.setCidade(ec.getCidade());
+		entidadeCompleta.setUf(ec.getUf());
+		entidadeCompleta.setFk_idEntidade(ec.getFk_idEntidade());
+		entidadeCompleta.setId(e.getId());
+		entidadeCompleta.setEndId(ec.getId());
+		System.out.println("OBJETO RETORNADO" + entidadeCompleta);
+		return new ResponseEntity<ClienteEntidadeEndereco>(entidadeCompleta, HttpStatus.OK);
 	}
 	
 

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +18,62 @@ import com.entra21.cashsolidario.entity.Endereco;
 @Service
 @Repository
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
+
+	@Autowired
+	public default Endereco procuraEnderecoCliente(Long id) {
+		Endereco enderecoBuscado = new Endereco();
+		Connection conexao = Banco.getConnection();
+		String sql = " SELECT * FROM ENDERECO WHERE FK_IDCLIENTE = ? ";
+		// Obter o preparedStatement
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
+		try {
+			stmt.setLong(1, id);
+			ResultSet rst = stmt.executeQuery();
+			if (rst.next()) {
+				enderecoBuscado.setId(rst.getLong("id"));
+				enderecoBuscado.setLogradouro(rst.getString("logradouro"));
+				enderecoBuscado.setNumero(rst.getInt("numero"));
+				enderecoBuscado.setComplemento(rst.getString("complemento"));
+				enderecoBuscado.setBairro(rst.getString("bairro"));
+				enderecoBuscado.setCep(rst.getString("cep"));
+				enderecoBuscado.setCidade(rst.getString("cidade"));
+				enderecoBuscado.setUf(rst.getString("uf"));
+				enderecoBuscado.setFk_idCliente(rst.getLong("fk_idCliente"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Erro " + e);
+		}
+		return enderecoBuscado;
+	}
+	
+	@Autowired
+	public default Endereco procuraEnderecoEntidade(Long id) {
+		Endereco enderecoBuscado = new Endereco();
+		Connection conexao = Banco.getConnection();
+		String sql = " SELECT * FROM ENDERECO WHERE FK_IDENTIDADE = ? ";
+		// Obter o preparedStatement
+		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
+		try {
+			stmt.setLong(1, id);
+			ResultSet rst = stmt.executeQuery();
+			if (rst.next()) {
+				enderecoBuscado.setId(rst.getLong("id"));
+				enderecoBuscado.setLogradouro(rst.getString("logradouro"));
+				enderecoBuscado.setNumero(rst.getInt("numero"));
+				enderecoBuscado.setComplemento(rst.getString("complemento"));
+				enderecoBuscado.setBairro(rst.getString("bairro"));
+				enderecoBuscado.setCep(rst.getString("cep"));
+				enderecoBuscado.setCidade(rst.getString("cidade"));
+				enderecoBuscado.setUf(rst.getString("uf"));
+				enderecoBuscado.setFk_idEntidade(rst.getLong("fk_idEntidade"));
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Erro " + e);
+		}
+		return enderecoBuscado;
+	}
 
 	@Autowired
 	public default boolean enderecoExcluiCliente(Long id) {
