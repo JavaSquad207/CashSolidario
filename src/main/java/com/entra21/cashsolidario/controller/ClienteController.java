@@ -1,10 +1,8 @@
 package com.entra21.cashsolidario.controller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.entra21.cashsolidario.entity.Banco;
 import com.entra21.cashsolidario.entity.Cliente;
 import com.entra21.cashsolidario.entity.Endereco;
-import com.entra21.cashsolidario.facemodels.ClienteEndereco;
+import com.entra21.cashsolidario.facemodels.ClienteEntidadeEndereco;
 import com.entra21.cashsolidario.repository.ClienteRepository;
 import com.entra21.cashsolidario.repository.EnderecoRepository;
 
@@ -34,7 +31,7 @@ public class ClienteController {
 	private ClienteRepository clienteRepository;
 	
 	@Autowired
-	private ClienteEndereco clienteEndereco;
+	private ClienteEntidadeEndereco clienteEndereco;
 	
 	
 	@Autowired
@@ -49,11 +46,13 @@ public class ClienteController {
 
 	@PostMapping(value = "salvar")
 	@ResponseBody
-	public ResponseEntity<?> salvar(@RequestBody ClienteEndereco c) {
+	public ResponseEntity<?> salvar(@RequestBody ClienteEntidadeEndereco c) {
+		System.out.println(c);
 		Cliente novoCliente = new Cliente();
+		novoCliente.setId(c.getId());
 		novoCliente.setNome(c.getNome());
 		novoCliente.setCpf(c.getCpf());
-		Cliente clienteGravado = clienteRepository.save(novoCliente);
+		Cliente clienteGravado = clienteRepository.saveAndFlush(novoCliente);
 		Endereco novoEndereco = new Endereco();
 		novoEndereco.setFk_idCliente(clienteGravado.getId());
 		novoEndereco.setLogradouro(c.getLogradouro());
@@ -63,7 +62,9 @@ public class ClienteController {
 		novoEndereco.setCep(c.getCep());
 		novoEndereco.setCidade(c.getCidade());
 		novoEndereco.setUf(c.getUf());
-		enderecoRepository.save(novoEndereco);
+		novoEndereco.setId(c.getEndId());
+		
+		enderecoRepository.saveAndFlush(novoEndereco);
 		return new ResponseEntity<Cliente>(clienteGravado, HttpStatus.CREATED);
 	}
 
@@ -85,11 +86,27 @@ public class ClienteController {
 
 	}
 
-	@GetMapping(value = "clienteid")
+	@GetMapping(value = "clienteid/{id}")
 	@ResponseBody
-	public ResponseEntity<Cliente> ClienteID(@PathVariable("id") Long id) {
+	public ResponseEntity<?> ClienteID(@PathVariable("id") Long id) {
+		
 		Cliente c = clienteRepository.findById(id).get();
-		return new ResponseEntity<Cliente>(c, HttpStatus.OK);
+		Endereco ec = new Endereco() ;
+		ec = enderecoRepository.procuraEnderecoCliente(id);
+		ClienteEntidadeEndereco clienteCompleto = new ClienteEntidadeEndereco();
+		clienteCompleto.setNome(c.getNome());
+		clienteCompleto.setCpf(c.getCpf());
+		clienteCompleto.setLogradouro(ec.getLogradouro());
+		clienteCompleto.setNumero(ec.getNumero());
+		clienteCompleto.setComplemento(ec.getComplemento());
+		clienteCompleto.setBairro(ec.getBairro());
+		clienteCompleto.setCep(ec.getCep());
+		clienteCompleto.setCidade(ec.getCidade());
+		clienteCompleto.setUf(ec.getUf());
+		clienteCompleto.setFk_idCliente(ec.getFk_idCliente());
+		clienteCompleto.setId(c.getId());
+		clienteCompleto.setEndId(ec.getId());
+		return new ResponseEntity<ClienteEntidadeEndereco>(clienteCompleto, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "atualizar")
@@ -108,47 +125,6 @@ public class ClienteController {
 		Cliente cliente = clienteRepository.saveAndFlush(c);
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
-	
-	
-	@PostMapping(value = "salvar001")
-	@ResponseBody
-	public ResponseEntity<?> salvar001(@RequestBody Cliente c) {
-		Cliente cliente = clienteRepository.save(c);
-		return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
-	}
-	
-	
-	public boolean enderecoExcluiCliente(Long id) {
-		boolean excluiu = false;
-
-		// Conectar no banco
-		Connection conexao = Banco.getConnection();
-		String sql = " DELETE FROM ENDERECO " + " WHERE FK_IDCLIENTE = ? ";
-		// Obter o preparedStatement
-		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
-		try {
-			// Executar
-			stmt.setLong(1, id);
-			int registrosExcluidos = stmt.executeUpdate();
-			excluiu = (registrosExcluidos > 0);
-		} catch (SQLException e) {
-			System.out.println("Erro ao excluir clente.\nCausa: " + e.getMessage());
-		} finally {
-			Banco.closePreparedStatement(stmt);
-			Banco.closeConnection(conexao);
-		}
-
-		return excluiu;
-	}
-
-	
-	
-	
 	
 }
 

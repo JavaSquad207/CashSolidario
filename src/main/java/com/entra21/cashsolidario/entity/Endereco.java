@@ -27,4 +27,5 @@ public class Endereco implements Serializable {
 	private String uf;
 	private Long fk_idEntidade;
 	private Long fk_idCliente;
+	
 }
