@@ -28,7 +28,7 @@ public class DoacaoController {
 	@PostMapping(value = "salvar")
 	@ResponseBody
 	public ResponseEntity<Doacao> salvar(@RequestBody Doacao d) {
-		Doacao doacao = doacaoRepository.save(d);
+		Doacao doacao = doacaoRepository.saveAndFlush(d);
 		return new ResponseEntity<Doacao>(doacao, HttpStatus.CREATED);
 	}
 	
@@ -45,7 +45,7 @@ public class DoacaoController {
 		return new ResponseEntity<String>("Doacao Excluída com Sucesso", HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "doacaoid")
+	@GetMapping(value = "doacaoid/{id}")
 	@ResponseBody
 	public ResponseEntity<Doacao> DoacaoId(@PathVariable("id") Long id) {
 		Doacao d = doacaoRepository.findById(id).get();
@@ -67,6 +67,13 @@ public class DoacaoController {
 		}
 		Doacao doacao = doacaoRepository.saveAndFlush(d);
 		return new ResponseEntity<Doacao>(doacao, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "salvar0001")
+	@ResponseBody
+	public ResponseEntity<Doacao> salvar00001(@RequestBody Doacao d) {
+		Doacao doacao = doacaoRepository.save(d);
+		return new ResponseEntity<Doacao>(doacao, HttpStatus.CREATED);
 	}
 	
 }
