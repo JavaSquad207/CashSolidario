@@ -29,7 +29,7 @@ public class CampanhaController {
 	@PostMapping(value="salvar")
 	@ResponseBody
 	public ResponseEntity<Campanha>salvar(@RequestBody Campanha c){
-		Campanha campanha = campanhaRepository.save(c);
+		Campanha campanha = campanhaRepository.saveAndFlush(c);
 		
 		return new ResponseEntity<Campanha>(campanha, HttpStatus.CREATED);
 	}
@@ -59,9 +59,18 @@ public class CampanhaController {
 		Campanha fabricante = campanhaRepository.saveAndFlush(c);
 		return new ResponseEntity<Campanha>(fabricante, HttpStatus.OK);		
 	}
-	
-	public  Campanha idExistente(Long id) {
+	@GetMapping(value = "campanhaid/{id}")
+	@ResponseBody	
+	public  Campanha idExistente(@PathVariable("id")Long id) {
 		Campanha c = campanhaRepository.findById(id).get();
 		return c;
+	}
+	
+	@PostMapping(value="salvar001")
+	@ResponseBody
+	public ResponseEntity<Campanha>salvar001(@RequestBody Campanha c){
+		Campanha campanha = campanhaRepository.save(c);
+		
+		return new ResponseEntity<Campanha>(campanha, HttpStatus.CREATED);
 	}
 }
