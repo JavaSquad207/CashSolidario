@@ -1,6 +1,7 @@
 package com.entra21.cashsolidario.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.entra21.cashsolidario.entity.Campanha;
 import com.entra21.cashsolidario.entity.Doacao;
+import com.entra21.cashsolidario.repository.CampanhaRepository;
 import com.entra21.cashsolidario.repository.DoacaoRepository;
 
 @RestController
@@ -25,10 +28,22 @@ public class DoacaoController {
 	@Autowired
 	private DoacaoRepository doacaoRepository;
 	
+	@Autowired
+	private CampanhaRepository campanhaRepository;
+	
 	@PostMapping(value = "salvar")
 	@ResponseBody
 	public ResponseEntity<Doacao> salvar(@RequestBody Doacao d) {
 		Doacao doacao = doacaoRepository.saveAndFlush(d);
+		Optional<Campanha> campanhaOptional= campanhaRepository.findById(d.getFkIdCampanha());
+		if(campanhaOptional.isPresent()) {
+		Campanha campanha = campanhaOptional.get();		
+		campanha.setId(d.getFkIdCampanha());
+		campanha.setSomaCampanha(campanha.getSomaCampanha()+d.getValor());
+		System.out.println(d.getValor());
+		campanhaRepository.saveAndFlush(campanha);
+		}
+				
 		return new ResponseEntity<Doacao>(doacao, HttpStatus.CREATED);
 	}
 	

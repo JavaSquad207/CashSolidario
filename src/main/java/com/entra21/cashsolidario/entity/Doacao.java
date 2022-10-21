@@ -1,5 +1,8 @@
 package com.entra21.cashsolidario.entity;
 
+import java.sql.Date;
+import java.util.Locale;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,13 +27,13 @@ public class Doacao {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private int fkIdCliente;
+	private Long fkIdCliente;
 	
-	private int fkIdCampanha;
+	private Long fkIdCampanha;
 	
 	private Double valor;
 	
-	private String dataRegistroDoacao;
+	private Date dataRegistroDoacao;
 		
 		
 }
