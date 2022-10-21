@@ -34,6 +34,9 @@ public class DoacaoController {
 	@PostMapping(value = "salvar")
 	@ResponseBody
 	public ResponseEntity<Doacao> salvar(@RequestBody Doacao d) {
+		if (d.getValor()<0) {
+			d.setFkIdCliente((long) 0);
+		}
 		Doacao doacao = doacaoRepository.saveAndFlush(d);
 		Optional<Campanha> campanhaOptional= campanhaRepository.findById(d.getFkIdCampanha());
 		if(campanhaOptional.isPresent()) {
