@@ -1,11 +1,16 @@
 package com.entra21.cashsolidario.entity;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -19,6 +24,16 @@ public class Campanha implements Serializable {
 	private Long id;
 	private int fkIdentidade;
 	private String nome;
-	private String dataInicio;
-	private String dataFinal;
-}
+	private LocalDate dataInicio;
+	private LocalDate dataFinal;
+	private Double somaCampanha;
+	
+	
+	
+		
+	
+	}
+	
+	
+	
+
